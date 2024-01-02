@@ -1,0 +1,17 @@
+#include "monty.h"
+
+/**
+ * pall - prints all the values on the stack
+ * @stack: stack
+ */
+
+void pall(stack_t **stack)
+{
+	stack_t *temp = *stack;
+
+	while (temp != NULL)
+	{
+		printf("%d\n", temp->n);
+		temp = temp->next;
+	}
+}
