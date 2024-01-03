@@ -10,13 +10,13 @@
 void run_instruction(stack_t **stack, unsigned int line_number, char *opcode)
 {
 	static const instruction_t opc[] = {
-		{"push", push}
-		{"pall", pall}
-		{"pint", pint}
-		{"pop", pop}
-		{"swap", swap}
-		{"add", add}
-		{"nop", nop}
+		{"push", push},
+		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"add", add},
+		{"nop", nop},
 		{NULL, NULL}};
 
 	int index;
