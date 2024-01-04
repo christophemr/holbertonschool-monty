@@ -16,13 +16,7 @@ int main(int argc, char *argv[])
 	stack_t *stack = NULL;
 
 	instruction_t opcodes[] = {
-		{"pall", _pall},
-		{"pint", _pint},
-		{"pop", _pop},
-		{"swap", _swap},
-		{"add", _add},
-		{"nop", _nop},
-		{NULL, NULL}
+		{"push", push}, {"pall", pall}, {"pint", pint}, {"pop", pop}, {"swap", swap}, {"add", add}, {"nop", nop}, {NULL, NULL}
 	};
 
 	if (argc != 2)
@@ -40,7 +34,6 @@ int main(int argc, char *argv[])
 	{
 		token = strtok(monty_line, " \n");
 		if (token == NULL)
-		{
 			continue;
 		i = 0;
 		while (opcodes[i].opcode != NULL)
@@ -61,12 +54,12 @@ int main(int argc, char *argv[])
 				if (tok != NULL)
 				{
 					integer = atoi(tok);
-					_push(&stack, integer);
+					push(&stack, integer);
 				}
 				else
 				{
 					fprintf(stderr, "L%d: usage: push integer\n", j + 1);
-					free_stack(stack);
+					cleanup(stack);
 					fclose(monty_file);
 					free(monty_line);
 					exit(EXIT_FAILURE);
@@ -75,7 +68,7 @@ int main(int argc, char *argv[])
 			else
 			{
 				fprintf(stderr, "L%d: unknown instruction %s\n", j + 1, token);
-				free_stack(stack);
+				cleanup(stack);
 				fclose(monty_file);
 				free(monty_line);
 				exit(EXIT_FAILURE);
@@ -86,7 +79,8 @@ int main(int argc, char *argv[])
 	}
 	fclose(monty_file);
 	free(monty_line);
-	free_stack(stack);
+	cleanup(stack);
 
 	return (0);
+	
 }

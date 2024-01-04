@@ -1,40 +1,25 @@
-#include "monty.h"
-
+ #include "monty.h"
 /**
- * push - push a node to the stack
- * @stack: stack
- * @line_number: line number in the file
- * @value: value to be pushed onto the stack
+ * _push - push an element onto the stack
+ * @stack: pointer to the stack
+ * @value: value to push onto the stack
+ * Return: void
  */
-
-void push(stack_t **stack, unsigned int line_number, const char *value_str)
+void _push(stack_t **stack, int value)
 {
-	int value = atoi(value_str);
-	if (value == 0 && value_str[0] != '\0')
+	stack_t *new_node = malloc(sizeof(stack_t));
+
+	if (new_node == NULL)
 	{
-		fprintf(stderr, "L%d: usage: push integer\n", line_number);
-		cleanup(*stack);
+		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-
-	stack_t *temp;
-
-	temp = malloc(sizeof(stack_t));
-	if (temp == NULL)
-	{
-		fprintf(stderr, "Error: malloc failed");
-		cleanup(*stack);
-		exit(EXIT_FAILURE);
-	}
-
-	temp->n = value;
-	temp->prev = NULL;
-	temp->next = (*stack != NULL) ? *stack : NULL;
-
+	new_node->n = value;
+	new_node->next = *stack;
+	new_node->prev = NULL;
 	if (*stack != NULL)
 	{
-		(*stack)->prev = temp;
+		(*stack)->prev = new_node;
 	}
-
-	*stack = temp;
+	*stack = new_node;
 }
