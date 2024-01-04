@@ -1,4 +1,5 @@
 #include "monty.h"
+extern instruction_t opc[];
 /**
  * main: Entry point
  * @argc: number of arguments
@@ -7,80 +8,37 @@
  */
 int main(int argc, char *argv[])
 {
-	FILE *monty_file;
-	int i, j = 0, integer, match = 0;
-	char *token = NULL;
-	char *tok = NULL;
-	char *monty_line = NULL;
-	size_t len = 0;
+	FILE *file;
+	int readstatus = 1;
+	char *linebuffer, *opcode;
+	unsigned int line_number;
 	stack_t *stack = NULL;
 
-	instruction_t opcodes[] = {
-		{"push", push}, {"pall", pall}, {"pint", pint}, {"pop", pop}, {"swap", swap}, {"add", add}, {"nop", nop}, {NULL, NULL}
-	};
 
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	monty_file = fopen(argv[1], "r");
-	if (monty_file == NULL)
+	file = fopen(argv[1], "r");
+	if (file == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	while (getline(&monty_line, &len, monty_file) != -1)
+
+	while (readstatus > 0)
 	{
-		token = strtok(monty_line, " \n");
-		if (token == NULL)
-			continue;
-		i = 0;
-		while (opcodes[i].opcode != NULL)
+		linebuffer = NULL;
+		readstatus = getline(&linebuffer, &(size_t){0}, file);
+		line_number++;
+		if (readstatus > 0 && linebuffer[0] != '#' && linebuffer[0] != '\n')
 		{
-			if (strcmp(token, opcodes[i].opcode) == 0)
-			{
-				opcodes[i].f(&stack, j + 1);
-				match = 1;
-				break;
-			}
-			i++;
+			opcode = strtok(linebuffer, " \n");
+			run_instruction(&stack, line_number, opcode);
 		}
-		if (!match)
-		{
-			if (strcmp(token, "push") == 0)
-			{
-				tok = strtok(NULL, " ");
-				if (tok != NULL)
-				{
-					integer = atoi(tok);
-					push(&stack, integer);
-				}
-				else
-				{
-					fprintf(stderr, "L%d: usage: push integer\n", j + 1);
-					cleanup(stack);
-					fclose(monty_file);
-					free(monty_line);
-					exit(EXIT_FAILURE);
-				}
-			}
-			else
-			{
-				fprintf(stderr, "L%d: unknown instruction %s\n", j + 1, token);
-				cleanup(stack);
-				fclose(monty_file);
-				free(monty_line);
-				exit(EXIT_FAILURE);
-			}
-		}
-		match = 0;
-		j++;
+		free(linebuffer);
 	}
-	fclose(monty_file);
-	free(monty_line);
 	cleanup(stack);
-
-	return (0);
-
+	fclose(file);return (0);
 }
