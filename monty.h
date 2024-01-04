@@ -39,7 +39,8 @@ typedef struct instruction_s
 
 void run_instruction(stack_t **stack, unsigned int line_number, char *opcode);
 void cleanup(stack_t *stack);
-void push(stack_t **stack, unsigned int line_number);
+void push(stack_t **stack, unsigned int line_number, int n);
+/* int n added to the push opc */
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
