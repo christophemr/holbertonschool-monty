@@ -1,5 +1,4 @@
 #include "monty.h"
-extern instruction_t opc[];
 /**
  * main: Entry point
  * @argc: number of arguments
@@ -8,38 +7,80 @@ extern instruction_t opc[];
  */
 int main(int argc, char *argv[])
 {
-	FILE *file;
-	int readstatus = 1;
-	size_t linebuffer = 0;
-	char *opcode;
-	unsigned int line_number = 0;
-	char *line = NULL;
-	stack_t *stack = NULL;
+        FILE *monty_file;
+        int i, j = 0, integer, match = 0;
+        char *token = NULL;
+        char *tok = NULL;
+        char *monty_line = NULL;
+        size_t len = 0;
+        stack_t *stack = NULL;
 
+        instruction_t opcodes[] = {
+                {"push", push}, {"pall", pall}, {"pint", pint}, {"pop", pop}, {"swap", swap}, {"add", add}, {"nop", nop}, {NULL, NULL}
+        };
 
-	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
-	file = fopen(argv[1], "r");
-	if (file == NULL)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
+        if (argc != 2)
+        {
+                fprintf(stderr, "USAGE: monty file\n");
+                exit(EXIT_FAILURE);
+        }
+        monty_file = fopen(argv[1], "r");
+        if (monty_file == NULL)
+        {
+                fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+                exit(EXIT_FAILURE);
+        }
+        while (getline(&monty_line, &len, monty_file) != -1)
+        {
+                token = strtok(monty_line, " \n");
+                if (token == NULL)
+                        continue;
+                i = 0;
+		 while (opcodes[i].opcode != NULL)
+                {
+                        if (strcmp(token, opcodes[i].opcode) == 0)
+                        {
+                                opcodes[i].f(&stack, j + 1);
+                                match = 1;
+                                break;
+                        }
+                        i++;
+                }
+                if (!match)
+                {
+                        if (strcmp(token, "push") == 0)
+                        {
+                                tok = strtok(NULL, " ");
+                                if (tok != NULL)
+                                {
+                                        integer = atoi(tok);
+                                        push(&stack, integer);
+                                }
+                                else
+                                {
+                                        fprintf(stderr, "L%d: usage: push integer\n", j + 1);
+                                        cleanup(stack);
+                                        fclose(monty_file);
+                                        free(monty_line);
+                                        exit(EXIT_FAILURE);
+                                }
+                        }
+                        else
+                        {
+                                fprintf(stderr, "L%d: unknown instruction %s\n", j + 1, token);
+                                cleanup(stack);
+                                fclose(monty_file);
+                                free(monty_line);
+                                exit(EXIT_FAILURE);
+                        }
+                }
+	  match = 0;
+                j++;
+        }
+        fclose(monty_file);
+        free(monty_line);
+        cleanup(stack);
 
-	while ((readstatus  = getline(&line, &linebuffer, file)) != -1)
-	{
-		line_number++;
-		opcode = strtok(line, " \n");
-		if (opcode)
-		{
-			run_instruc(&stack, line_number, opcode);
-		}
-	}
-	free(line);
-	fclose(file);
-	cleanup(stack);
-	return (0);
+        return (0);
 }
+
