@@ -44,7 +44,7 @@ typedef struct instruction_s
 int _iswhitespace(void);
 void exit_free(stack_t *stack);
 void free_stack(stack_t *stack);
-void parse_and_exec_cmd(stack_t **stack, unsigned int line_number, char *opcode);
+void parse_exec_cmd(stack_t **stack, unsigned int line_number, char *opcode);
 void push(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);

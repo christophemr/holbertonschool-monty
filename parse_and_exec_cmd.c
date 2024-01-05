@@ -1,12 +1,12 @@
 #include "monty.h"
 /**
- * parse_and_exec_cmd - check command in dictionary
+ * parse_exec_cmd - check command in dictionary
  * @opcode: the string name that is extracted by sscanf from getline
  * @stack: dptr to stack
  * @line_number: line number of monty file
  * Return: function pointer or null if no match
  */
-void parse_and_exec_cmd(stack_t **stack, unsigned int line_number, char *opcode)
+void parse_exec_cmd(stack_t **stack, unsigned int line_number, char *opcode)
 {
 	int index = 0;
 

@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 				exit(EXIT_FAILURE);
 			}
 			if (opcode != NULL && opcode[0] != '#')
-				parse_and_exec_cmd(&stack, line_number, opcode);
+				parse_exec_cmd(&stack, line_number, opcode);
 		}
 		free(globes.lineptr);
 		globes.lineptr = NULL;
@@ -49,3 +49,4 @@ int main(int argc, char *argv[])
 	exit_free(stack);
 	return (0);
 }
+
