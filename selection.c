@@ -7,7 +7,7 @@
  * @opcode: opcode handled
  */
 
-void run_instruc(stack_t **stack, unsigned int line_number, char *opcode)
+void execute_opcode(stack_t **stack, unsigned int line_number, char *opcode)
 {
 	static const instruction_t opc[] = {
 		{"push", push},
