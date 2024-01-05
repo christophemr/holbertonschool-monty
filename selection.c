@@ -30,7 +30,7 @@ void run_instruc(stack_t **stack, unsigned int line_number, char *opcode)
 		}
 	}
 
-	fprintf(stderr, "L%u: unknown instruction %s\n", line_number);
+	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
 	cleanup(*stack);
 	exit(EXIT_FAILURE);
 
