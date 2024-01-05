@@ -9,34 +9,31 @@
 
 void run_instruc(stack_t **stack, unsigned int line_number, char *opcode)
 {
-	if (strcmp(opcode, "push") == 0)
-	{
-		char *av_count = strtok(NULL, " \n");
+	static const instruction_t opc[] = {
+		{"push", push},
+		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"add", add},
+		{"nop", nop},
+		{NULL, NULL}};
 
-		if (!av_count || !is_digit(av_count))
+	int index;
+
+	for (index = 0; opc[index].opcode != NULL; index++)
+	{
+		if (strcmp(opcode, opc[index].opcode) == 0)
 		{
-			fprintf(stderr, "L%d: usage: push integer\n", line_number);
-			exit(EXIT_FAILURE);
+			opc[index].f(stack, line_number);
+			return;
 		}
-		push(stack, atoi(av_count), line_number);
 	}
-	else if (strcmp(opcode, "pall") == 0)
-		pall(stack, line_number);
-	else if (strcmp(opcode, "pint") == 0)
-                pint(stack, line_number);
-	else if (strcmp(opcode, "pop") == 0)
-                pop(stack, line_number);
-	else if (strcmp(opcode, "swap") == 0)
-                swap(stack, line_number);
-	else if (strcmp(opcode, "add") == 0)
-                add(stack, line_number);
-	else if (strcmp(opcode, "nop") == 0)
-                nop(stack);
-	else
-	{
 
-		fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
-		exit(EXIT_FAILURE);
-	}
+	fprintf(stderr, "L%u: unknown instruction %s\n", line_number);
+	cleanup(*stack);
+	exit(EXIT_FAILURE);
 
 }
+
+		
