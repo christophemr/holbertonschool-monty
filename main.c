@@ -10,8 +10,10 @@ int main(int argc, char *argv[])
 {
 	FILE *file;
 	int readstatus = 1;
-	char *linebuffer, *opcode;
-	unsigned int line_number;
+	size_t linebuffer = 0;
+	char *opcode;
+	unsigned int line_number = 0;
+	char *line = NULL;
 	stack_t *stack = NULL;
 
 
@@ -27,18 +29,17 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	while (readstatus > 0)
+	while ((readstatus  = getline(&line, &linebuffer, file)) != -1)
 	{
-		linebuffer = NULL;
-		readstatus = getline(&linebuffer, &(size_t){0}, file);
 		line_number++;
-		if (readstatus > 0 && linebuffer[0] != '#' && linebuffer[0] != '\n')
+		opcode = strtok(line, " \n");
+		if (opcode)
 		{
-			opcode = strtok(linebuffer, " \n");
 			run_instruction(&stack, line_number, opcode);
 		}
-		free(linebuffer);
 	}
+	free(linebuffer);
+	fclose(file);
 	cleanup(stack);
-	fclose(file);return (0);
+	return (0);
 }
