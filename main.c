@@ -9,9 +9,8 @@ int main(int argc, char *argv[])
 {
 	char opcode[6] = {0}, wrong[1024] = {0};
 	ssize_t read;
-	size_t len;
+	size_t len, matches = 0;
 	stack_t *stack = NULL;
-	int matches = 0;
 	unsigned int line_number = 0;
 
 	if (argc != 2)
