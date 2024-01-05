@@ -2,10 +2,10 @@
 /**
  * push - push an element onto the stack
  * @stack: pointer to the stack
- * @line_number: value to push onto the stack
+ * @line_number: current line number
  * Return: void
  */
-void push(stack_t **stack, unsigned int line_number)
+void push(stack_t **stack, int n, unsigned int line_number)
 {
 
 	stack_t *new_node = malloc(sizeof(stack_t));
@@ -15,6 +15,7 @@ void push(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: Error: malloc failed\n", line_number);
 		exit(EXIT_FAILURE);
 	}
+	new_node->n = n;
 	new_node->next = *stack;
 	new_node->prev = NULL;
 

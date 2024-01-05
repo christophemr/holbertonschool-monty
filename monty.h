@@ -38,13 +38,14 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void run_instruction(stack_t **stack, unsigned int line_number, char *opcode);
+void run_instruc(stack_t **stack, unsigned int line_number, char *opcode);
 void cleanup(stack_t *stack);
-void push(stack_t **stack, unsigned int line_number);
+void push(stack_t **stack, int n, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
-void nop(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack);
 void swap(stack_t **stack, unsigned int line_number);
 void add(stack_t **stack, unsigned int line_number);
+int is_digit(const char *input_str);
 #endif

@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 			run_instruc(&stack, line_number, opcode);
 		}
 	}
-	free(linebuffer);
+	free(line);
 	fclose(file);
 	cleanup(stack);
 	return (0);
