@@ -1,6 +1,6 @@
 # Stacks, Queues - LIFO, FIFO
+![photo](https://github.com/christophemr/holbertonschool-monty/assets/134635340/c7ec33bd-980b-4c92-a55e-af7c5afaa576)
 
-![](./photo.png)
 
 ## Monty
 
